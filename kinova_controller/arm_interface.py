@@ -16,7 +16,7 @@ import numpy as np
 from multiprocess.managers import BaseManager as MPBaseManager
 
 RPC_AUTHKEY = b"secret-key"
-NUC_HOSTNAME = "192.168.1.3"
+NUC_HOSTNAME = "172.26.47.200"
 ARM_RPC_PORT = 5000
 
 

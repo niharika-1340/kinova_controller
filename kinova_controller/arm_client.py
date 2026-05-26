@@ -6,6 +6,7 @@ Entrypoint for controlling the robot arm on compute machine.
 import threading
 import time
 import numpy as np
+import os 
 
 from kinova_controller.arm_interface import (
     ARM_RPC_PORT,
@@ -94,6 +95,10 @@ class ArmInterfaceClient:
 
 if __name__ == "__main__":
 
+    dof = input("enter number of DOF (6 or 7): ").strip()
+    assert dof in ["6","7"], "Must be 6 or 7"
+    os.environ["KINOVA_DOF"]= dof
+
     arm_client_interface = ArmInterfaceClient()
 
     run_commands = input("Press 'y' to run commands")
@@ -102,13 +107,24 @@ if __name__ == "__main__":
         exit()
 
     input("Press enter to move to home pos (make sure DoFs in code matches the robot)...")
-    home_pos = [
-        0, 
-        0.26190290154176943, 
-        -3.1415700167205274, 
-        -2.269006324528677, 
-        0, 
-        0.959890342232203, 
+    home_pos_6dof = [
+        0,
+        0.26190290154176943,
+        -3.1415700167205274,
+        -2.269006324528677,
+        0,
+        0.959890342232203
+    ]
+
+    home_pos_7dof = [
+        0,
+        0.26190290154176943,
+        -3.1415700167205274,
+        -2.269006324528677,
+        0,
+        0.959890342232203,
         1.570794329424079
     ]
+
+    home_pos = home_pos_6dof if dof == "6" else home_pos_7dof
     arm_client_interface.execute_command(JointCommand(home_pos))

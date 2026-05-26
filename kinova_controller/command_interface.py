@@ -8,6 +8,7 @@ from dataclasses import dataclass
 import numpy as np
 from numpy.typing import NDArray
 
+import os
 
 class KinovaCommand:
     """Establish an interface for commands that can be sent to the robot."""
@@ -22,7 +23,7 @@ class JointTrajectoryCommand(KinovaCommand):
     # Rajat ToDo: Ask Tom if this is bad practice
     def __init__(self, traj):
         object.__setattr__(self, "traj", [np.array(x) for x in traj])
-        num_dof = 7
+        num_dof = int(os.environ.get("KINOVA_DOF", 6))
         assert all(x.shape == (num_dof,) for x in self.traj)
 
 
@@ -34,7 +35,7 @@ class JointCommand(KinovaCommand):
 
     def __init__(self, pos):
         object.__setattr__(self, "pos", np.array(pos))  # convert list to numpy array
-        num_dof = 7
+        num_dof = int(os.environ.get("KINOVA_DOF", 6))
         assert self.pos.shape == (num_dof,)
 
 
